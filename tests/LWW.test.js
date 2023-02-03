@@ -8,16 +8,28 @@ test('init payload', () => {
 
 describe('update', () => {
   test('success - update payload if the input with the correct data structure, e.g. timestamp (date format) and x (any)', () => {
-
+    const result = lww.update("test");
+    expect(result.x).toBe("test");
+    expect(result.timestamp).toBeInstanceOf(Date)
   });
 
   // the data structure X is allow user to submit the empty value
   test('success - update payload with input X is an empty string', () => {
+    const result = lww.update("");
+    expect(result.x).toBe("");
+  });
 
+  test('success - update payload with input X is an null', () => {
+    const result = lww.update(null);
+    expect(result.x).toBe(null);
+  });
+
+  test('failure - update payload with input X is an undefined', () => {
+    expect(() => { lww.update(undefined) }).toThrow('Undefined input value');
   });
 
   test('failure - not update payload with input X is undefined, and throw Error', () => {
-
+    expect(() => { lww.update() }).toThrow('Undefined input value');
   })
 });
 
