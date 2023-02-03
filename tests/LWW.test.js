@@ -159,6 +159,22 @@ describe('compare', () => {
 
     expect(() => { lww.compare(replica, replica2) }).toThrow('Record two is invalid data structure');
   });
+
+  test('failure - compare payload with missed record one, and throw Error', () => {
+    lww2.update("test13");
+    const replica2 = lww2.query();
+    expect(() => { lww.compare(undefined, replica2) }).toThrow('Record one is invalid data structure');
+  });
+
+  test('failure - compare payload with missed record two, and throw Error', () => {
+    lww.update("test14");
+    const replica = lww.query();
+    expect(() => { lww.compare(replica, undefined) }).toThrow('Record two is invalid data structure');
+  });
+
+  test('failure - compare payload with missed record two, and throw Error', () => {
+    expect(() => { lww.compare(undefined, undefined) }).toThrow('Record one is invalid data structure');
+  });
 })
 
 describe('merge', () => {
