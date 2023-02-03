@@ -19,24 +19,28 @@ describe('update', () => {
   test('failure - update payload failed with input timestamp is invalid date, and throw Error', () => {
 
   });
+
+  test('failure - update payload failed with input timestamp is negative number (decrementing), and throw Error', () => {
+
+  });
 });
 
 describe('query', () => {
   test('success - query the init payload', () => {
 
-  })
+  });
 
   test('success - query the updated payload w/ timestamp of input is larger than the timestamp of payload', () => {
 
-  })
+  });
 
   test('success - query the non-update payload w/ timestamp of input is smaller than the timestamp of payload', () => {
 
-  })
+  });
 
   test('failure - query the payload failed when the timestamp is invalid date, and throw Error', () => {
 
-  })
+  });
 })
 
 describe('compare', () => {
@@ -46,7 +50,7 @@ describe('compare', () => {
 
   test('success - compare payload and input, and return true. With timestamp of input is equal to the timestamp of payload', () => {
 
-  })
+  });
 
   test('success - compare payload and input, and return false. With timestamp of input is smaller than the timestamp of payload', () => {
 
@@ -54,20 +58,19 @@ describe('compare', () => {
 
   test('failure - compare payload with an invalid input, and throw Error', () => {
 
-  })
+  });
 
   test('failure - compare payload with input timestamp is invalid date, and throw Error', () => {
 
-  })
+  });
 })
-
 
 describe('merge', () => {
   test('success - merge payload and input if compare returned true, and return updated payload by input', () => {
 
-  })
+  });
 
   test('success - merge payload and input if compare returned false, and return update payload by original payload', () => {
 
-  })
+  });
 })
