@@ -33,7 +33,7 @@ class LWWStateBased {
       throw new Error('Record one is invalid data structure');
     }
 
-    if (r2.x === undefined || typeof r1.timestamp !== "number") {
+    if (r2.x === undefined || typeof r2.timestamp !== "number") {
       throw new Error('Record two is invalid data structure');
     }
 
