@@ -15,14 +15,6 @@ describe('update', () => {
   test('success - update payload with input X is an empty value', () => {
 
   });
-
-  test('failure - update payload failed with input timestamp is invalid date, and throw Error', () => {
-
-  });
-
-  test('failure - update payload failed with input timestamp is negative number (decrementing), and throw Error', () => {
-
-  });
 });
 
 describe('query', () => {
@@ -66,11 +58,21 @@ describe('compare', () => {
 })
 
 describe('merge', () => {
+  // const payload = {};
+
   test('success - merge payload and input if compare returned true, and return updated payload by input', () => {
 
   });
 
   test('success - merge payload and input if compare returned false, and return update payload by original payload', () => {
+
+  });
+
+  test('failure - update payload failed with input timestamp is invalid date, and throw Error', () => {
+
+  });
+
+  test('failure - update payload failed with input timestamp is negative number (decrementing), and throw Error', () => {
 
   });
 })
