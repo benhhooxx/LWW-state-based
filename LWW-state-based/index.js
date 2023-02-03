@@ -8,8 +8,16 @@ class LWWStateBased {
     }
   }
 
-  update() {
-    // based on the timestamp, consistent with causality
+  update(w) {
+    if (w !== undefined) {
+      this.payload = {
+        x: w,
+        timestamp: new Date()
+      }
+      return this.payload;
+    } else {
+      throw new Error('Undefined input value');
+    }
   }
 
   query() {
