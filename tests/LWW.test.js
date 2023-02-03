@@ -1,9 +1,15 @@
 const LWWStateBased = require('../LWW-state-based');
 
 const lww = new LWWStateBased();
+const init = { "timestamp": 0, "x": null };
 
 test('init payload', () => {
-  expect(lww.query()).toStrictEqual({ "timestamp": 0, "x": null });
+  expect(lww.query()).toStrictEqual(init);
+});
+
+afterEach(() => {
+  // reset the payload for all test suits
+  lww.payload = init;
 });
 
 describe('update', () => {
@@ -35,8 +41,13 @@ describe('update', () => {
 
 describe('query', () => {
   test('success - query the init payload', () => {
-
+    expect(lww.query()).toStrictEqual({ "timestamp": 0, "x": null });
   });
+
+  test('success - query the updated payload', () => {
+    const result = lww.update("test");
+    expect(lww.query()).toStrictEqual(result);
+  })
 
   test('success - query the updated payload w/ timestamp of input is larger than the timestamp of payload', () => {
 
