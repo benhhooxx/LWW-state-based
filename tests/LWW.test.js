@@ -67,6 +67,11 @@ describe('query', () => {
     lww.payload.timestamp = { a: 'abc' };
     expect(() => { lww.query() }).toThrow('Invalid timestamp');
   });
+
+  test('failure - query the payload failed when the X is undefined, and throw Error', () => {
+    lww.payload.x = undefined;
+    expect(() => { lww.query() }).toThrow('Invalid timestamp');
+  });
 })
 
 describe('compare', () => {
