@@ -51,14 +51,6 @@ describe('query', () => {
     expect(lww.query()).toStrictEqual(result);
   })
 
-  test('success - query the updated payload w/ timestamp of input is larger than the timestamp of payload', () => {
-
-  });
-
-  test('success - query the non-update payload w/ timestamp of input is smaller than the timestamp of payload', () => {
-
-  });
-
   test('failure - query the payload failed when the timestamp is invalid date - string, and throw Error', () => {
     lww.payload.timestamp = 'abc';
     expect(() => { lww.query() }).toThrow('Invalid timestamp');
@@ -178,21 +170,59 @@ describe('compare', () => {
 })
 
 describe('merge', () => {
-  // const payload = {};
+  let payload = {};
+  const invalidPayload = {
+    x: null,
+    timestamp: "abc"
+  };
+  const decrementingPayload = {
+    x: null,
+    timestamp: -1
+  };
 
   test('success - merge payload and input if compare returned true, and return updated payload by input', () => {
-
+    lww.update("test");
+    payload = lww.query();
+    setTimeout(() => {
+      lww2.update("test2");
+      const replica = lww2.query();
+      const result = lww.merge(payload, replica);
+      expect(result).toMatchObject(replica);
+    }, [100])
   });
 
   test('success - merge payload and input if compare returned false, and return update payload by original payload', () => {
-
+    lww.update("test3");
+    setTimeout(() => {
+      lww2.update("test4");
+      payload = lww2.query();
+      const replica = lww.query();
+      const result = lww.merge(payload, replica);
+      expect(result).toMatchObject(payload);
+    }, [100])
   });
 
-  test('failure - update payload failed with input timestamp is invalid date, and throw Error', () => {
-
+  test('failure - update payload failed with input timestamp is invalid date from record one, and throw Error', () => {
+    lww.update("test5");
+    const replica = lww.query();
+    expect(() => { lww.merge(invalidPayload, replica) }).toThrow('Record one is invalid data structure');
   });
 
-  test('failure - update payload failed with input timestamp is negative number (decrementing), and throw Error', () => {
+  test('failure - update payload failed with input timestamp is invalid date from record two, and throw Error', () => {
+    lww.update("test6");
+    const replica = lww.query();
+    expect(() => { lww.merge(replica, invalidPayload) }).toThrow('Record two is invalid data structure');
+  });
 
+  test('failure - update payload failed with input timestamp is negative number (decrementing) from record one, and throw Error', () => {
+    lww.update("test7");
+    const replica = lww.query();
+    expect(() => { lww.merge(decrementingPayload, replica) }).toThrow('Record one is invalid data structure');
+  });
+
+  test('failure - update payload failed with input timestamp is negative number (decrementing) from record two, and throw Error', () => {
+    lww.update("test8");
+    const replica = lww.query();
+    expect(() => { lww.merge(replica, decrementingPayload) }).toThrow('Record two is invalid data structure');
   });
 })

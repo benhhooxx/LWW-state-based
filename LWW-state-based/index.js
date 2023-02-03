@@ -29,11 +29,11 @@ class LWWStateBased {
   }
 
   compare(r1, r2) {
-    if (!!!r1 || r1.x === undefined || typeof r1.timestamp !== "number") {
+    if (!!!r1 || r1.x === undefined || typeof r1.timestamp !== "number" || r1.timestamp < 0) {
       throw new Error('Record one is invalid data structure');
     }
 
-    if (!!!r2 || r2.x === undefined || typeof r2.timestamp !== "number") {
+    if (!!!r2 || r2.x === undefined || typeof r2.timestamp !== "number" || r2.timestamp < 0) {
       throw new Error('Record two is invalid data structure');
     }
 
@@ -41,8 +41,18 @@ class LWWStateBased {
     else return false;
   }
 
-  merge() {
-
+  merge(r1, r2) {
+    if (this.compare(r1, r2)) {
+      return {
+        x: r2.x,
+        timestamp: r2.timestamp
+      }
+    } else {
+      return {
+        x: r1.x,
+        timestamp: r1.timestamp
+      }
+    }
   }
 }
 
