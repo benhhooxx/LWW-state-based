@@ -21,7 +21,7 @@ class LWWStateBased {
   }
 
   query() {
-    if (typeof this.payload.timestamp === "number") {
+    if (typeof this.payload.timestamp === "number" && this.payload.x !== undefined) {
       return this.payload;
     } else {
       throw new Error('Invalid timestamp');
