@@ -1,4 +1,4 @@
-
+const ErrorMessage = require('../constants/error');
 
 class LWWStateBased {
   constructor() {
@@ -16,7 +16,7 @@ class LWWStateBased {
       }
       return this.payload;
     } else {
-      throw new Error('Undefined input value');
+      throw new Error(ErrorMessage.UNDEFINED_INPUT_VALUE);
     }
   }
 
@@ -24,17 +24,17 @@ class LWWStateBased {
     if (typeof this.payload.timestamp === "number" && this.payload.x !== undefined) {
       return this.payload;
     } else {
-      throw new Error('Invalid timestamp');
+      throw new Error(ErrorMessage.INVALID_TIMESTAMP);
     }
   }
 
   compare(r1, r2) {
     if (!!!r1 || r1.x === undefined || typeof r1.timestamp !== "number" || r1.timestamp < 0) {
-      throw new Error('Record one is invalid data structure');
+      throw new Error(ErrorMessage.INVALID_RECORD_ONE);
     }
 
     if (!!!r2 || r2.x === undefined || typeof r2.timestamp !== "number" || r2.timestamp < 0) {
-      throw new Error('Record two is invalid data structure');
+      throw new Error(ErrorMessage.INVALID_RECORD_TWO);
     }
 
     if (r1.timestamp <= r2.timestamp) return true;

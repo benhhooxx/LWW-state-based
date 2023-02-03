@@ -1,4 +1,5 @@
 const LWWStateBased = require('../LWW-state-based');
+const ErrorMessage = require('../constants/error');
 
 const lww = new LWWStateBased();
 const lww2 = new LWWStateBased();
@@ -33,11 +34,11 @@ describe('update', () => {
   });
 
   test('failure - update payload with input X is an undefined', () => {
-    expect(() => { lww.update(undefined) }).toThrow('Undefined input value');
+    expect(() => { lww.update(undefined) }).toThrow(ErrorMessage.UNDEFINED_INPUT_VALUE);
   });
 
   test('failure - not update payload with input X is undefined, and throw Error', () => {
-    expect(() => { lww.update() }).toThrow('Undefined input value');
+    expect(() => { lww.update() }).toThrow(ErrorMessage.UNDEFINED_INPUT_VALUE);
   })
 });
 
@@ -53,17 +54,17 @@ describe('query', () => {
 
   test('failure - query the payload failed when the timestamp is invalid date - string, and throw Error', () => {
     lww.payload.timestamp = 'abc';
-    expect(() => { lww.query() }).toThrow('Invalid timestamp');
+    expect(() => { lww.query() }).toThrow(ErrorMessage.INVALID_TIMESTAMP);
   });
 
   test('failure - query the payload failed when the timestamp is invalid date - object, and throw Error', () => {
     lww.payload.timestamp = { a: 'abc' };
-    expect(() => { lww.query() }).toThrow('Invalid timestamp');
+    expect(() => { lww.query() }).toThrow(ErrorMessage.INVALID_TIMESTAMP);
   });
 
   test('failure - query the payload failed when the X is undefined, and throw Error', () => {
     lww.payload.x = undefined;
-    expect(() => { lww.query() }).toThrow('Invalid timestamp');
+    expect(() => { lww.query() }).toThrow(ErrorMessage.INVALID_TIMESTAMP);
   });
 })
 
@@ -112,7 +113,7 @@ describe('compare', () => {
 
     replica.x = undefined;
 
-    expect(() => { lww.compare(replica, replica2) }).toThrow('Record one is invalid data structure');
+    expect(() => { lww.compare(replica, replica2) }).toThrow(ErrorMessage.INVALID_RECORD_ONE);
   });
 
   test('failure - compare payload with an invalid timestamp from record one, and throw Error', () => {
@@ -124,7 +125,7 @@ describe('compare', () => {
 
     replica.timestamp = "abc";
 
-    expect(() => { lww.compare(replica, replica2) }).toThrow('Record one is invalid data structure');
+    expect(() => { lww.compare(replica, replica2) }).toThrow(ErrorMessage.INVALID_RECORD_ONE);
   });
 
   test('failure - compare payload with an invalid X from record two, and throw Error', () => {
@@ -136,7 +137,7 @@ describe('compare', () => {
 
     replica2.x = undefined;
 
-    expect(() => { lww.compare(replica, replica2) }).toThrow('Record two is invalid data structure');
+    expect(() => { lww.compare(replica, replica2) }).toThrow(ErrorMessage.INVALID_RECORD_TWO);
   });
 
   // NOTE: this testcase really traced the wrong code, typeof r1.timestamp => typeof r2.timestamp in compare second condition
@@ -149,23 +150,23 @@ describe('compare', () => {
 
     replica2.timestamp = "abc";
 
-    expect(() => { lww.compare(replica, replica2) }).toThrow('Record two is invalid data structure');
+    expect(() => { lww.compare(replica, replica2) }).toThrow(ErrorMessage.INVALID_RECORD_TWO);
   });
 
   test('failure - compare payload with missed record one, and throw Error', () => {
     lww2.update("test13");
     const replica2 = lww2.query();
-    expect(() => { lww.compare(undefined, replica2) }).toThrow('Record one is invalid data structure');
+    expect(() => { lww.compare(undefined, replica2) }).toThrow(ErrorMessage.INVALID_RECORD_ONE);
   });
 
   test('failure - compare payload with missed record two, and throw Error', () => {
     lww.update("test14");
     const replica = lww.query();
-    expect(() => { lww.compare(replica, undefined) }).toThrow('Record two is invalid data structure');
+    expect(() => { lww.compare(replica, undefined) }).toThrow(ErrorMessage.INVALID_RECORD_TWO);
   });
 
   test('failure - compare payload with missed record two, and throw Error', () => {
-    expect(() => { lww.compare(undefined, undefined) }).toThrow('Record one is invalid data structure');
+    expect(() => { lww.compare(undefined, undefined) }).toThrow(ErrorMessage.INVALID_RECORD_ONE);
   });
 })
 
@@ -205,24 +206,24 @@ describe('merge', () => {
   test('failure - update payload failed with input timestamp is invalid date from record one, and throw Error', () => {
     lww.update("test5");
     const replica = lww.query();
-    expect(() => { lww.merge(invalidPayload, replica) }).toThrow('Record one is invalid data structure');
+    expect(() => { lww.merge(invalidPayload, replica) }).toThrow(ErrorMessage.INVALID_RECORD_ONE);
   });
 
   test('failure - update payload failed with input timestamp is invalid date from record two, and throw Error', () => {
     lww.update("test6");
     const replica = lww.query();
-    expect(() => { lww.merge(replica, invalidPayload) }).toThrow('Record two is invalid data structure');
+    expect(() => { lww.merge(replica, invalidPayload) }).toThrow(ErrorMessage.INVALID_RECORD_TWO);
   });
 
   test('failure - update payload failed with input timestamp is negative number (decrementing) from record one, and throw Error', () => {
     lww.update("test7");
     const replica = lww.query();
-    expect(() => { lww.merge(decrementingPayload, replica) }).toThrow('Record one is invalid data structure');
+    expect(() => { lww.merge(decrementingPayload, replica) }).toThrow(ErrorMessage.INVALID_RECORD_ONE);
   });
 
   test('failure - update payload failed with input timestamp is negative number (decrementing) from record two, and throw Error', () => {
     lww.update("test8");
     const replica = lww.query();
-    expect(() => { lww.merge(replica, decrementingPayload) }).toThrow('Record two is invalid data structure');
+    expect(() => { lww.merge(replica, decrementingPayload) }).toThrow(ErrorMessage.INVALID_RECORD_TWO);
   });
 })
