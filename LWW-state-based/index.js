@@ -28,8 +28,17 @@ class LWWStateBased {
     }
   }
 
-  compare() {
+  compare(r1, r2) {
+    if (r1.x === undefined || typeof r1.timestamp !== "number") {
+      throw new Error('Record one is invalid data structure');
+    }
 
+    if (r2.x === undefined || typeof r1.timestamp !== "number") {
+      throw new Error('Record two is invalid data structure');
+    }
+
+    if (r1.timestamp <= r2.timestamp) return true;
+    else return false;
   }
 
   merge() {
