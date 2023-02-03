@@ -12,7 +12,7 @@ class LWWStateBased {
     if (w !== undefined) {
       this.payload = {
         x: w,
-        timestamp: new Date()
+        timestamp: new Date().valueOf()
       }
       return this.payload;
     } else {
@@ -21,7 +21,11 @@ class LWWStateBased {
   }
 
   query() {
-    return this.payload;
+    if (typeof this.payload.timestamp === "number") {
+      return this.payload;
+    } else {
+      throw new Error('Invalid timestamp');
+    }
   }
 
   compare() {
