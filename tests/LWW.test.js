@@ -60,3 +60,14 @@ describe('compare', () => {
 
   })
 })
+
+
+describe('merge', () => {
+  test('success - merge payload and input if compare returned true, and return updated payload by input', () => {
+
+  })
+
+  test('success - merge payload and input if compare returned false, and return update payload by original payload', () => {
+
+  })
+})
