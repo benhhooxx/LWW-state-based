@@ -12,9 +12,13 @@ describe('update', () => {
   });
 
   // the data structure X is allow user to submit the empty value
-  test('success - update payload with input X is an empty value', () => {
+  test('success - update payload with input X is an empty string', () => {
 
   });
+
+  test('failure - not update payload with input X is undefined, and throw Error', () => {
+
+  })
 });
 
 describe('query', () => {
