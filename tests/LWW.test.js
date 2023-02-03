@@ -1,6 +1,7 @@
 const LWWStateBased = require('../LWW-state-based');
 
 const lww = new LWWStateBased();
+const lww2 = new LWWStateBased();
 const init = { "timestamp": 0, "x": null };
 
 test('init payload', () => {
@@ -76,15 +77,38 @@ describe('query', () => {
 
 describe('compare', () => {
   test('success - compare payload and input, and return true. With timestamp of input is larger than the timestamp of payload', () => {
-
+    lww.update("test");
+    setTimeout(async () => {
+      lww2.update("test2");
+      const replica = lww.query();
+      const replica2 = lww2.query();
+      expect(lww.compare(replica, replica2)).toBe(true);
+    }, [100])
   });
 
   test('success - compare payload and input, and return true. With timestamp of input is equal to the timestamp of payload', () => {
+    lww.update("test");
+    lww2.update("test2");
 
+    const _timestamp = new Date().valueOf();
+
+    lww.payload.timestamp = _timestamp;
+    lww2.payload.timestamp = _timestamp;
+
+    const replica = lww.query();
+    const replica2 = lww2.query();
+
+    expect(lww.compare(replica, replica2)).toBe(true);
   });
 
-  test('success - compare payload and input, and return false. With timestamp of input is smaller than the timestamp of payload', () => {
-
+  test('success - compare payload and input, and return false. With timestamp of input is smaller than the timestamp of payload', async () => {
+    lww2.update("test3");
+    setTimeout(() => {
+      lww.update("test4");
+      const replica = lww.query();
+      const replica2 = lww2.query();
+      expect(lww.compare(replica, replica2)).toBe(false);
+    }, [0])
   });
 
   test('failure - compare payload with an invalid input, and throw Error', () => {
