@@ -16,7 +16,8 @@ describe('update', () => {
   test('success - update payload if the input with the correct data structure, e.g. timestamp (date format) and x (any)', () => {
     const result = lww.update("test");
     expect(result.x).toBe("test");
-    expect(result.timestamp).toBeInstanceOf(Date)
+    expect(typeof result.timestamp).toBe("number")
+    expect(new Date(result.timestamp)).toBeInstanceOf(Date)
   });
 
   // the data structure X is allow user to submit the empty value
@@ -57,8 +58,14 @@ describe('query', () => {
 
   });
 
-  test('failure - query the payload failed when the timestamp is invalid date, and throw Error', () => {
+  test('failure - query the payload failed when the timestamp is invalid date - string, and throw Error', () => {
+    lww.payload.timestamp = 'abc';
+    expect(() => { lww.query() }).toThrow('Invalid timestamp');
+  });
 
+  test('failure - query the payload failed when the timestamp is invalid date - object, and throw Error', () => {
+    lww.payload.timestamp = { a: 'abc' };
+    expect(() => { lww.query() }).toThrow('Invalid timestamp');
   });
 })
 
