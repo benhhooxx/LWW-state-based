@@ -1,12 +1,12 @@
-const LLWStateBased = require('../LWW-state-based');
+const LWWStateBased = require('../LWW-state-based');
 
-const _LLWStateBased = new LLWStateBased();
+const lww = new LWWStateBased();
 
 test('init payload', () => {
-  expect(_LLWStateBased.query()).toStrictEqual({ "timestamp": 0, "x": null });
+  expect(lww.query()).toStrictEqual({ "timestamp": 0, "x": null });
 });
 
-describe('update payload', () => {
+describe('update', () => {
   test('success - update payload successfully with timestamp of input is larger than the timestamp of payload', () => {
 
   });
@@ -15,7 +15,7 @@ describe('update payload', () => {
 
   });
 
-  test('failure - update payload failed with input with the invalid days timestamp', () => {
+  test('failure - update payload failed with input with the invalid date timestamp', () => {
 
   });
 
@@ -23,3 +23,21 @@ describe('update payload', () => {
 
   });
 });
+
+describe('query', () => {
+  test('success - query the init payload', () => {
+
+  })
+
+  test('success - query the updated payload w/ timestamp of input is larger than the timestamp of payload', () => {
+
+  })
+
+  test('success - query the non-update payload w/ timestamp of input is smaller than the timestamp of payload', () => {
+
+  })
+
+  test('failure - query the payload failed when the timestamp is invalid date', () => {
+
+  })
+})

@@ -1,6 +1,6 @@
 
 
-class LLWStateBased {
+class LWWStateBased {
   constructor() {
     this.payload = {
       x: null,
@@ -25,4 +25,4 @@ class LLWStateBased {
   }
 }
 
-module.exports = LLWStateBased;
+module.exports = LWWStateBased;
