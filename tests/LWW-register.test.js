@@ -1,8 +1,8 @@
-const LWWStateBased = require('../LWW-state-based');
+const LWWRegisterStateBased = require('../LWW-register-state-based');
 const ErrorMessage = require('../constants/error');
 
-const lww = new LWWStateBased();
-const lww2 = new LWWStateBased();
+const lww = new LWWRegisterStateBased();
+const lww2 = new LWWRegisterStateBased();
 const init = { "timestamp": 0, "x": null };
 
 test('init payload', () => {

@@ -1,7 +1,7 @@
 const ErrorMessage = require('../constants/error');
 
 // Ref: * https://hal.inria.fr/inria-00555588/PDF/techreport.pdf - Specification 8 State-based LWW-Register
-class LWWStateBased {
+class LWWRegisterStateBased {
   constructor() {
     this.payload = {
       x: null,
@@ -81,4 +81,4 @@ class LWWStateBased {
   }
 }
 
-module.exports = LWWStateBased;
+module.exports = LWWRegisterStateBased;
