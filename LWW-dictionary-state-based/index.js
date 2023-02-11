@@ -19,17 +19,12 @@ class LWWDictionaryStateBased {
     // check the key of e is include this.addSet, 
     // since this function is for remove to check whether the this.addSet hv this element of not,
     // remove if hv; con't remove if not have.
-    if (CommonUtils.isObject(e)) {
-      const key = Object.keys(e)[0];
-      if (Object.keys(this.addSet).indexOf(key) > -1
-        && Object.keys(this.removeSet).indexOf(key) === -1) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
+    if (!CommonUtils.isObject(e)) {
       throw new Error(ErrorMessage.INVALID_DATA_FORMAT);
     }
+
+    const [key] = Object.keys(e);
+    return (key in this.addSet) && !(key in this.removeSet);
   }
 
   /**
@@ -48,16 +43,15 @@ class LWWDictionaryStateBased {
    * addSet is defined by A appends { e }
    */
   add(e) {
-    if (e === null || e === undefined || e === "") {
+    if (!!!e) {
       throw new Error(ErrorMessage.UNDEFINED_INPUT_VALUE);
     }
 
-    if (CommonUtils.isValidInput(e)) {
-      const object = this.dto(e);
-      this.addSet = { ...this.addSet, ...object };
-    } else {
+    if (!CommonUtils.isValidInput(e)) {
       throw new Error(ErrorMessage.INVALID_DATA_FORMAT);
     }
+
+    this.addSet = { ...this.addSet, ...this.dto(e) };
   }
 
   /**
@@ -66,17 +60,16 @@ class LWWDictionaryStateBased {
    * removeSet is defined by R appends { e } if lookup(e) returns true
    */
   remove(e) {
-    if (e === null || e === undefined || e === "") {
+    if (!!!e) {
       throw new Error(ErrorMessage.UNDEFINED_INPUT_VALUE);
     }
 
-    if (CommonUtils.isValidInput(e)) {
-      const object = this.dto(e);
-      if (this.lookup(object)) {
-        this.removeSet = { ...this.removeSet, ...object }
-      }
-    } else {
+    if (!CommonUtils.isValidInput(e)) {
       throw new Error(ErrorMessage.INVALID_DATA_FORMAT);
+    }
+
+    if (this.lookup(this.dto(e))) {
+      this.removeSet = { ...this.removeSet, ...this.dto(e) }
     }
   }
 
@@ -88,7 +81,7 @@ class LWWDictionaryStateBased {
    * b is defined by 
    */
   compare(replica) {
-    if (replica.addSet === undefined || replica.removeSet === undefined) {
+    if (!replica.addSet || !replica.removeSet) {
       throw new Error(ErrorMessage.UNDEFINED_INPUT_VALUE);
     }
 
@@ -106,28 +99,22 @@ class LWWDictionaryStateBased {
    * @returns payload = { addSet: {}, removeSet: {} }
    */
   merge(replica) {
-    if (replica.addSet === undefined || replica.removeSet === undefined) {
+    if (!replica.addSet || !replica.removeSet) {
       throw new Error(ErrorMessage.UNDEFINED_INPUT_VALUE);
     }
 
-    const payload = {
-      addSet: {},
-      removeSet: {}
-    }
-
-    payload.addSet = { ...this.addSet, ...replica.addSet };
-
-    payload.removeSet = { ...this.removeSet, ...replica.removeSet };
+    const addSet = { ...this.addSet, ...replica.addSet };
+    const removeSet = { ...this.removeSet, ...replica.removeSet };
 
     for (const [element, timestamp] of Object.entries(this.addSet)) {
-      payload.addSet[element] = Math.max(replica.addSet[element] || 0, timestamp);
+      addSet[element] = Math.max(replica.addSet[element] || 0, timestamp);
     }
 
     for (const [element, timestamp] of Object.entries(this.removeSet)) {
-      payload.removeSet[element] = Math.max(replica.removeSet[element] || 0, timestamp);
+      removeSet[element] = Math.max(replica.removeSet[element] || 0, timestamp);
     }
 
-    return payload;
+    return { addSet, removeSet };
   }
 }
 
